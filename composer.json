@@ -1,0 +1,22 @@
+{
+    "name": "tualo/fibuconv",
+    "description": "tualo - fibuconv",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Hoffmann",
+            "email": "thomas.hoffmann@tualo.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tualo\\Office\\FibuConv\\": "src/"
+        },
+        "files": ["src/functions.php"]
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "stripe/stripe-php": "*"
+    }
+}
