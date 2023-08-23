@@ -3,7 +3,7 @@ Ext.define('Tualo.routes.FibuConv',{
     handler: {
         action: function(token){
             console.log('onAnyRoute',token);
-            alert('stripe','ok');
+            alert('fibuconv','ok');
         },
         before: function (action) {
             console.log('onBeforeToken',action);
