@@ -17,6 +17,6 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "stripe/stripe-php": "*"
+        "ramsey/uuid": "*"
     }
 }
