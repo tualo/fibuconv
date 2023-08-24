@@ -4,6 +4,10 @@ Ext.define('Tualo.fibuconv.commands.Upload', {
       title: 'Datei hochladen',
       tooltip: 'Datei hochladen',
     },
+    controller: 'cmp_fibuconv_upload',
+    viewModel: {
+        type: 'cmp_fibuconv_upload'
+    },
     extend: 'Ext.panel.Panel',
     alias: 'widget.fibuconv_upload_command',
     layout: 'fit',
