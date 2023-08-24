@@ -104,7 +104,7 @@ Ext.define('Tualo.fibuconv.commands.controller.Upload', {
                 store.getData().getAt(i).commit();
                 //replace "insert your upload url here" with the real url
                 //this.postDocument("./index.php?TEMPLATE=NO&cmp=cmp_fibuconv&p=upload", store, i);
-                this.postDocument("./fibuconverter/upload", store, i);
+                this.postDocument("./fibuconv/upload", store, i);
             }
         }
 
