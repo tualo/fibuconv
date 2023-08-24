@@ -1,5 +1,5 @@
 
-Ext.define('Tualo.fibuconv.commands.models.Upload', {
+Ext.define('Tualo.fibuconv.commands.controller.Upload', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.fibuconv_upload_command',
     rendererStatus: function(value, metaData, record, rowIndex, colIndex, store) {
