@@ -4,6 +4,10 @@ Ext.define('Tualo.fibuconv.commands.Upload', {
       title: 'Datei hochladen',
       tooltip: 'Datei hochladen',
     },
+    requires: [
+        'Tualo.fibuconv.commands.models.Upload',
+        'Tualo.fibuconv.commands.controller.Upload'
+      ],
     controller: 'fibuconv_upload_command',
     viewModel: {
         type: 'fibuconv_upload_command'
