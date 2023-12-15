@@ -1,5 +1,24 @@
 delimiter //
 
+CREATE OR REPLACE PROCEDURE `fibufiles_plenty_to_table`( IN fileID varchar(36) )
+BEGIN 
+    DECLARE filedata LONGBLOB;
+    FOR files IN (
+        select * from  view_readtable_fibufiles where 
+            detected_type='plenty'
+            and __file_id = fileID
+            limit 10000
+    ) DO
+        set filedata = (select  from_base64( SUBSTRING_INDEX(data ,',',-1) )  names from ds_files_data where file_id = files.__file_id);
+        set filedata = HTML_UnEncode(filedata);
+        -- select substring(filedata,1,800);
+        drop table if exists sample;
+
+        call csv_to_table(filedata,char(10),char(59),'sample');
+
+    END FOR;
+END //
+
 CREATE OR REPLACE PROCEDURE `fibufiles_plenty`( )
 BEGIN 
 

@@ -18,6 +18,10 @@ call addfieldifnotexists('fibufiles','detected_charset','varchar(25) default nul
 CREATE
 OR REPLACE VIEW `view_readtable_fibufiles` AS
 select
+concat(
+        '<a target="_blank" href="./dsfiles/fibufiles/',fibufiles.file_id,'">Download</a>'
+    ) download_url,
+
   `fibufiles`.`id` AS `id`,
   `fibufiles`.`typ` AS `typ`,
 

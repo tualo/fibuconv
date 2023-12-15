@@ -394,6 +394,10 @@ THEN SET TextString = REPLACE(TextString, '&aring;','å') ;
 END IF ; 
 
 
+IF INSTR( X , '&aelig;;' ) 
+THEN SET TextString = REPLACE(TextString, '&aelig;;','æ;;') ; 
+END IF ; 
+
 IF INSTR( X , '&aelig;' ) 
 THEN SET TextString = REPLACE(TextString, '&aelig;','æ') ; 
 END IF ; 
