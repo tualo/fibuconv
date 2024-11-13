@@ -9,38 +9,88 @@ class Convert implements IRoute{
     
     public static function register(){
         
+
+                
+        BasicRoute::add('/fibuconv/preconvert',function(){
+            App::contenttype('application/json');
+            $db = App::get('session')->getDB();
+            if($db == NULL){
+                App::result('msg', 'Nicht erlaubt');
+
+              
+
+
+            }else{
+                $files = $db->direct("select * from view_readtable_fibufiles where typ='unkown'  and __file_type in ('text/plain', 'text/csv')  ");
+
+                foreach($files as $file){
+
+                    $sql = "select ds_files_data.*, from_base64(SUBSTRING_INDEX(data, ',', -1)) x, CHARSET(from_base64(SUBSTRING_INDEX(data, ',', -1))) c from ds_files_data where file_id = {__file_id}";
+
+                    $rec = $db->singleValue($sql,$file,'c');
+                    if ($rec==='binary'){
+
+                        $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
+                        list($mime,$d)=explode('base64,', $data);
+                        $d = base64_decode($d);
+                        if (@iconv( 'UTF-8','ISO-8859-1', $d )==false){
+                            $dc  = iconv( 'ISO-8859-1','UTF-8', $d );
+                            $db->direct('update ds_files_data set data={data} where file_id = {file_id}',[
+                                'file_id'=>$file['__file_id'],
+                                'data'=>$mime.'base64,'.base64_encode($dc)
+                            ]);
+
+                        }
+                    }
+
+                    /*
+                    $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
+                    list($mime,$d)=explode('base64,', $data);
+                    $d = base64_decode($d);
+                    */
+                }
+
+
+                App::result('success',true);
+            }
+        },['get','post'],true);
+
         BasicRoute::add('/fibuconv/convert',function(){
             
             $db = App::get('session')->getDB();
             if($db == NULL){
                 App::result('msg', 'Nicht erlaubt');
             }else{
-                $files = $db->direct('select * from fibufiles where typ="ebay-tra-c"  ');
+
+                /*
+                $files = $db->direct('select * from fibufiles where typ="ebay-tra-c" and id ="79a7e33e-8d3a-11ef-81d4-0242c0a8b302"  ');
 
                 foreach($files as $file){
                     $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
                     list($mime,$d)=explode('base64,', $data);
                     $d = base64_decode($d);
-                    if (@iconv( 'UTF-8','ISO-8859-1', $d )==false){
-                        $dc  = iconv( 'ISO-8859-1','UTF-8', $d );
+                    echo $d;
+                    exit();
+                }
+*/
+               
 
-                        
-                        $db->direct('update ds_files_data set data={data} where file_id = {file_id}',[
-                            'file_id'=>$file['file_id'],
-                            'data'=>$mime.'base64,'.base64_encode($dc)
-                        ]);
+                $files = $db->direct('select * from fibufiles where typ="ebay-tra"  ');
 
-                        
-                         
-                    }else{
-
-                    }
+                foreach($files as $file){
+                    $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
+                    list($mime,$d)=explode('base64,', $data);
+                    $d = base64_decode($d);
+                    $db->direct('update ds_files_data set data={data} where file_id = {file_id}',[
+                        'file_id'=>$file['file_id'],
+                        'data'=>$mime.'base64,'.base64_encode(utf8_decode($d))
+                    ]);
                     $db->direct("update fibufiles set typ = 'ebay-tra-c' where id = {id}",['id'=>$file['id']]);
                 }
+ 
 
 
-
-                $files = $db->direct('select * from fibufiles where typ in ("paypal-1","paypal-2","paypal-3")  ');
+                $files = $db->direct('select * from fibufiles where typ in ("paypal-1","paypal-2","paypal-3","paypal-4")  ');
 
                 foreach($files as $file){
                     $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
