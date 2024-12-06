@@ -90,7 +90,7 @@ class Convert implements IRoute{
  
 
 
-                $files = $db->direct('select * from fibufiles where typ in ("paypal-1","paypal-2","paypal-3","paypal-4")  ');
+                $files = $db->direct('select * from fibufiles where typ in ("paypal-1","paypal-2","paypal-3","paypal-4","paypal-5")  ');
 
                 foreach($files as $file){
                     $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
@@ -137,7 +137,7 @@ class Convert implements IRoute{
                 
 
 
-                $files = $db->direct('select * from fibufiles where typ in ("ama-p-1")  ');
+                $files = $db->direct('select * from fibufiles where typ in ("ama-p-1","ama-p-2")  ');
 
                 foreach($files as $file){
                     $data = \Tualo\Office\DS\DSFiles::instance('fibufiles')->getBase64('id',$file['id']);
@@ -163,13 +163,16 @@ class Convert implements IRoute{
                     $d= str_replace('"""','',$d);
                     $d= preg_replace('/^"/m','',$d);
 
-                    //echo $d; exit();
-                    $db->direct('update ds_files_data set data={data} where file_id = {file_id}',[
-                        'file_id'=>$file['file_id'],
-                        'data'=>$mime.'base64,'.base64_encode($d)
-                    ]);
+                    try{
+                        $db->direct('update ds_files_data set data={data} where file_id = {file_id}',[
+                            'file_id'=>$file['file_id'],
+                            'data'=>$mime.'base64,'.base64_encode($d)
+                        ]);
 
-                    $db->direct("update fibufiles set typ = concat(typ,'-c') where id = {id}",['id'=>$file['id']]);
+                        $db->direct("update fibufiles set typ = concat(typ,'-c') where id = {id}",['id'=>$file['id']]);
+                    }catch(\Exception $e){
+                        echo $e->getMessage();
+                    }
                 }
 
                 App::result('success',true);
