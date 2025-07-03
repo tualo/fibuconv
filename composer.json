@@ -1,22 +1,26 @@
 {
-    "name": "tualo/fibuconv",
-    "description": "tualo - fibuconv",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thomas Hoffmann",
-            "email": "thomas.hoffmann@tualo.de"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Tualo\\Office\\FibuConv\\": "src/"
-        },
-        "files": ["src/functions.php"]
-    },
-    "minimum-stability": "dev",
-    "require": {
-        "ramsey/uuid": "*"
+  "name": "tualo/fibuconv",
+  "description": "tualo - fibuconv",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Hoffmann",
+      "email": "thomas.hoffmann@tualo.de"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Tualo\\Office\\FibuConv\\": "src/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "ramsey/uuid": "~4.9.0",
+    "tualo/ds": "^1.0.1"
+  },
+  "version": "1.0.1"
 }
