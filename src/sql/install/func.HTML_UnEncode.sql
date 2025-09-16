@@ -522,6 +522,11 @@ IF INSTR( X , '&yuml;' )
 THEN SET TextString = REPLACE(TextString, '&yuml;','ÿ') ; 
 END IF ; 
 
+IF INSTR( X , '&#322;' ) 
+THEN SET TextString = REPLACE(TextString, '&#322;',' ') ; 
+END IF ; 
+
+
 RETURN TextString ; 
 
 END

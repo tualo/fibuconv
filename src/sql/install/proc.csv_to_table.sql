@@ -1,6 +1,5 @@
 delimiter //
-
-CREATE OR REPLACE PROCEDURE `csv_to_table`( 
+CREATE OR REPLACE  PROCEDURE `csv_to_table`( 
     IN data LONGBLOB,
     IN line_delim VARCHAR(10),
     IN column_delim VARCHAR(10),
@@ -14,7 +13,7 @@ BEGIN
     set rowdata = concat((select word from temp_csv_lines where num=1) );
     select rowdata x;
     set @l=rowdata;
---    select substring_index(regexp_replace(rowdata,"[^0-9a-zA-Z,\-\.\;]",""),char(59),-1) word , 19999 num ;
+
     drop table if exists temp_csv_columns;
     call split_str_into_table(rowdata,column_delim,'temp_csv_columns');
     select * from temp_csv_columns;
@@ -35,6 +34,9 @@ BEGIN
     from 
         temp_csv_columns
     ;
+ 
+ select max(num) into @max_col from temp_csv_columns;
+
     SET @create_table = concat('create temporary table ',temp_table,' (',@create_columns,')');
 
     PREPARE stmt FROM @create_table;
@@ -47,7 +49,11 @@ BEGIN
         drop table if exists temp_csv_column_data;
         call split_str_into_table(record.word,column_delim,'temp_csv_column_data');
 
-        
+        select max(num) into @max_col_in_row from temp_csv_column_data;
+        if @max_col_in_row < @max_col then
+            insert into temp_csv_column_data (num, word) values (@max_col,record.word);
+        end if;
+
         select 
             
             group_concat(
@@ -59,6 +65,7 @@ BEGIN
             @insert_values
         from 
             temp_csv_column_data
+        where num <= @max_col
         ;
         SET @insert_table = concat('insert into ',temp_table,' (',@insert_columns,') values (',@insert_values,')');
         
