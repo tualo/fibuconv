@@ -7,7 +7,7 @@ use Tualo\Office\Basic\Route as BasicRoute;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\DS;
 
-class Convert implements IRoute
+class Convert extends \Tualo\Office\Basic\RouteWrapper
 {
 
     public static function register()
