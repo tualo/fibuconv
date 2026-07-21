@@ -10,6 +10,30 @@ use Ramsey\Uuid\Uuid;
 class Upload extends \Tualo\Office\Basic\RouteWrapper
 {
 
+    public static function error2txt($error)
+    {
+        switch ($error) {
+            case UPLOAD_ERR_INI_SIZE:
+                return "UPLOAD_ERR_INI_SIZE: Die Datei ist zu gro&szlig";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                return "UPLOAD_ERR_FORM_SIZE: Die Datei ist zu gro&szlig";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                return "UPLOAD_ERR_PARTIAL: Die Datei wurde nur teilweise hochgeladen";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                return "UPLOAD_ERR_NO_FILE: Es wurde keine Datei hochgeladen";
+                break;
+            case 0:
+                return " ";
+                break;
+            default:
+                return "Unbekannter Fehler";
+                break;
+        }
+    }
+
     public static function register()
     {
 
@@ -20,29 +44,7 @@ class Upload extends \Tualo\Office\Basic\RouteWrapper
                 App::result('msg', 'Nicht erlaubt');
             } else {
 
-                function error2txt($error)
-                {
-                    switch ($error) {
-                        case UPLOAD_ERR_INI_SIZE:
-                            return "UPLOAD_ERR_INI_SIZE: Die Datei ist zu gro&szlig";
-                            break;
-                        case UPLOAD_ERR_FORM_SIZE:
-                            return "UPLOAD_ERR_FORM_SIZE: Die Datei ist zu gro&szlig";
-                            break;
-                        case UPLOAD_ERR_PARTIAL:
-                            return "UPLOAD_ERR_PARTIAL: Die Datei wurde nur teilweise hochgeladen";
-                            break;
-                        case UPLOAD_ERR_NO_FILE:
-                            return "UPLOAD_ERR_NO_FILE: Es wurde keine Datei hochgeladen";
-                            break;
-                        case 0:
-                            return " ";
-                            break;
-                        default:
-                            return "Unbekannter Fehler";
-                            break;
-                    }
-                }
+
 
                 $error = "";
                 if (isset($_FILES['file'])) {
@@ -53,7 +55,7 @@ class Upload extends \Tualo\Office\Basic\RouteWrapper
                     $error = $_FILES['file']['error'];
                     if ($error == UPLOAD_ERR_OK) {
                         $tempname = '.ht_' . ((Uuid::uuid4())->toString());
-                        $temppath = App::get('tempPath');
+                        $temppath = (string)App::get('tempPath');
                         if (file_exists($temppath . '/' . $tempname . '.' . $extension)) {
                             unlink($temppath . '/' . $tempname . '.' . $extension);
                         }
@@ -104,7 +106,7 @@ class Upload extends \Tualo\Office\Basic\RouteWrapper
                             unlink($temppath . '/' . $tempname . '.' . $extension);
                         }
                     } else {
-                        App::result('msg', error2txt($error));
+                        App::result('msg', self::error2txt($error));
                     }
                 }
             }

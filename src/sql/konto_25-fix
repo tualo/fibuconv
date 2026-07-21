@@ -1,0 +1,10 @@
+select 
+blg_pos_krechnung.id,
+artikel ,
+bfkonten.konto_3,
+
+concat('update blg_pos_krechnung set konto = "',konto_3,'" where id = ',blg_pos_krechnung.id,char(56)) x
+from blg_pos_krechnung 
+join bfkonten_zuordnung on bfkonten_zuordnung.gruppe =  blg_pos_krechnung.artikel
+join bfkonten on bfkonten.id = bfkonten_zuordnung.konto_id
+where blg_pos_krechnung.konto = '25'
